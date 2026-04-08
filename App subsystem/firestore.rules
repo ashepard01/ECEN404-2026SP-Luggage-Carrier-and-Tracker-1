@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Signed-in helper
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    // Owner helper for docs that may use userId or userID
+    function isOwnerByDoc(data) {
+      return isSignedIn()
+        && (data.userId == request.auth.uid || data.userID == request.auth.uid);
+    }
+
+    // User profile doc
+    match /users/{uid} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Session root doc
+    match /sessions/{sessionId} {
+      allow create: if isOwnerByDoc(request.resource.data);
+      allow read, update, delete: if isOwnerByDoc(resource.data);
+
+      // Session points subcollection
+      match /points/{pointId} {
+        allow create, read: if isSignedIn()
+          && isOwnerByDoc(get(/databases/$(database)/documents/sessions/$(sessionId)).data);
+        allow update, delete: if false;
+      }
+    }
+
+    // Telemetry samples grouped by uid
+    match /telemetry/{uid}/samples/{sampleId} {
+      allow create, read: if isSignedIn() && request.auth.uid == uid;
+      allow update, delete: if false;
+    }
+  }
+}
