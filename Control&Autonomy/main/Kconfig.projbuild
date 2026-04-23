@@ -1,0 +1,6 @@
+menu "Test Harness Select"
+    config TEST_LIDAR
+        bool "Run LIDAR smoke test"
+    config TEST_HX711
+        bool "Run HX711 smoke test"
+endmenu

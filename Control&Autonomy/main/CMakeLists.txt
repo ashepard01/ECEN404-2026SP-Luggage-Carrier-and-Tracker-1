@@ -1,0 +1,26 @@
+idf_component_register(
+    SRCS 
+        "events.h" 
+        "state_machine.cpp" 
+        "app_main.cpp"
+        "controllers.cpp"
+        "oa_module.cpp"
+        "PID.cpp"
+        "encoder.cpp"
+        "odometry.cpp"
+        "MotorDriver.cpp"
+        "control_task.cpp"
+        "comms.c"
+        "shared_state.c"
+        "oa_task.cpp"
+        "localization.cpp"
+        "rplidar.c"
+        "state_machine_task.cpp"
+        "uwb_rx_task.cpp"
+        "lidar_preprocess.cpp"
+        "hx711.cpp"
+        "buzzer.cpp"
+        "alarm_test_task.cpp"
+    INCLUDE_DIRS
+        "."
+)
